@@ -216,7 +216,7 @@ func groupBlocks(pages []page, body float64, verbatim bool) []block {
 		}
 	}
 	flush()
-	return mergeAdjacentTables(blocks)
+	return mergeWrappedHeadings(mergeAdjacentTables(blocks))
 }
 
 // nestLevel places a list marker at x among the marker positions of the open levels
@@ -419,6 +419,34 @@ func linePitches(lines []line) map[float64]float64 {
 		out[size] = modeByWeight(c)
 	}
 	return out
+}
+
+// mergeWrappedHeadings joins a heading the page wrapped onto a second line:
+// the lines are classified one by one, so "8 … zum Problem- und Ände-" and
+// "rungsmanagement" came out as two headings of the same level, and the
+// chapter was named "rungsmanagement" downstream. Two adjacent headings of the
+// same level are one when the first ends with a wrap hyphen or the second
+// begins with a lowercase letter — no heading begins in lowercase.
+func mergeWrappedHeadings(blocks []block) []block {
+	out := blocks[:0:0]
+	for _, b := range blocks {
+		if n := len(out); n > 0 && b.kind == kindHeading && out[n-1].kind == kindHeading && out[n-1].level == b.level && wrapsOn(out[n-1].text, b.text) {
+			out[n-1].text = joinWrapped(out[n-1].text, b.text)
+			continue
+		}
+		out = append(out, b)
+	}
+	return out
+}
+
+// wrapsOn: next continues prev across a line break.
+func wrapsOn(prev, next string) bool {
+	pr, nr := []rune(strings.TrimSpace(prev)), []rune(strings.TrimSpace(next))
+	if len(pr) == 0 || len(nr) == 0 {
+		return false
+	}
+	last := pr[len(pr)-1]
+	return last == '-' || last == '‐' || last == '­' || unicode.IsLower(nr[0])
 }
 
 // joinWrapped appends next to acc: a soft hyphen is removed, and a hard hyphen only
