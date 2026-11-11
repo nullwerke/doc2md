@@ -2,7 +2,7 @@ module github.com/nullwerke/doc2md
 
 go 1.26.0
 
-toolchain go1.26.10
+toolchain go1.26.11
 
 require (
 	github.com/ledongthuc/pdf v0.0.0-20250511090121-5959a4027728
