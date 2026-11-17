@@ -10,7 +10,7 @@ require (
 	github.com/richardlehane/mscfb v1.0.9
 	github.com/xuri/excelize/v2 v2.11.1
 	golang.org/x/net v0.62.0
-	golang.org/x/text v0.43.0
+	golang.org/x/text v0.44.0
 )
 
 require (
