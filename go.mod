@@ -7,7 +7,7 @@ toolchain go1.26.11
 require (
 	github.com/ledongthuc/pdf v0.0.0-20250511090121-5959a4027728
 	github.com/pdfcpu/pdfcpu v0.16.4
-	github.com/richardlehane/mscfb v1.0.9
+	github.com/richardlehane/mscfb v1.0.10
 	github.com/xuri/excelize/v2 v2.11.1
 	golang.org/x/net v0.62.0
 	golang.org/x/text v0.44.0
